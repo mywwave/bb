@@ -60,8 +60,8 @@ understand; development builds always show these diagnostic rows.
   bb settings version [--force]
   bb settings reload
 
-The `toolsHub` experiment exposes the unified Skills, Plugins, and Automations
-management UI. It does not enable or disable installed skills, automation
+The `toolsHub` experiment exposes the Plugins & Skills management UI. Schedules
+stay beside threads. It does not enable or disable installed skills, schedule
 execution, plugin runtimes, CLI commands, or backend APIs. Control user plugin
 loading separately with the `plugins` experiment.
 

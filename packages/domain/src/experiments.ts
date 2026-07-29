@@ -21,8 +21,9 @@ export const experimentsSchema = z.object({
    */
   plugins: z.boolean(),
   /**
-   * Tools Hub: exposes the unified Skills, Plugins, and Automations management
-   * UI. This is a presentation gate only; it does not load or unload tools.
+   * Tools Hub: exposes the Plugins & Skills management UI. Schedules remain a
+   * separate plugin surface beside threads. This is a presentation gate only;
+   * it does not load or unload tools.
    */
   toolsHub: z.boolean(),
   /**

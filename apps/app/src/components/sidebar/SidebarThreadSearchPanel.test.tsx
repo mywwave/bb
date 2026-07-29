@@ -415,7 +415,7 @@ describe("sidebar thread search navigation items", () => {
 });
 
 describe("ProjectListActionButtons", () => {
-  it("exposes one Tools entry instead of duplicating tool-family navigation", () => {
+  it("exposes Plugins & Skills without duplicating its child navigation", () => {
     const onOpenTools = vi.fn();
     render(
       <ProjectListActionButtons
@@ -424,11 +424,10 @@ describe("ProjectListActionButtons", () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: "Tools" }));
+    fireEvent.click(screen.getByRole("button", { name: "Plugins & Skills" }));
     expect(onOpenTools).toHaveBeenCalledOnce();
     expect(screen.queryByRole("button", { name: "Skills" })).toBeNull();
     expect(screen.queryByRole("button", { name: "Plugins" })).toBeNull();
-    expect(screen.queryByRole("button", { name: "Automations" })).toBeNull();
   });
 
   it("shows the compose pane position when New thread is open in a split", () => {

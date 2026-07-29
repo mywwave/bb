@@ -7,7 +7,7 @@ import {
   useSyncExternalStore,
 } from "react";
 import { useQuery, type QueryKey } from "@tanstack/react-query";
-import { useLocation, useNavigate } from "react-router-dom";
+import { matchPath, useLocation, useNavigate } from "react-router-dom";
 import type { PromptTextMention } from "@bb/domain";
 import type {
   BbContext,
@@ -45,19 +45,15 @@ import {
 } from "@/lib/prompt-draft";
 import {
   AUTOMATIONS_PLUGIN_ID,
-  AUTOMATIONS_PLUGIN_PANEL_PATH,
-  getAutomationDetailRoutePath,
-  getAutomationEditRoutePath,
-  getAutomationsRoutePath,
   getPluginPanelRoutePath,
   getProjectComposeRoutePath,
   getRootComposeRoutePath,
   getThreadRoutePath,
+  SCHEDULE_EDIT_ROUTE_PATH,
 } from "@/lib/route-paths";
 import { useRouteState } from "@/hooks/useRouteState";
 import { useServerConnectionState } from "@/hooks/useServerConnectionState";
 import { wsManager } from "@/lib/ws";
-import { useToolsHubExperiment } from "@/components/tools/tools-experiment-context";
 
 /**
  * Host implementations of the `@bb/plugin-sdk/app` hooks (plugin design
@@ -72,26 +68,10 @@ type FetchLike = (
   init?: RequestInit,
 ) => Promise<Pick<Response, "ok" | "status" | "json">>;
 
-export function getAutomationPluginPanelRoutePath(subPath: string): string {
-  const parts = subPath.split("/").filter((part) => part.length > 0);
-  if (parts.length === 0) return getAutomationsRoutePath();
-  if (parts.length === 1 && parts[0] === "browse") {
-    return `${getAutomationsRoutePath()}?view=browse`;
-  }
-  if (parts.length !== 2 && !(parts.length === 3 && parts[2] === "edit")) {
-    return getAutomationsRoutePath();
-  }
-  const [projectId, automationId, mode] = parts;
-  if (projectId === undefined || automationId === undefined) {
-    return getAutomationsRoutePath();
-  }
-  return mode === "edit"
-    ? getAutomationEditRoutePath({ projectId, automationId })
-    : getAutomationDetailRoutePath({ projectId, automationId });
-}
-
-export function isAutomationEditRoutePath(pathname: string): boolean {
-  return /^\/tools\/automations\/[^/]+\/[^/]+\/edit$/.test(pathname);
+export function isScheduleEditRoutePath(pathname: string): boolean {
+  return (
+    matchPath({ path: SCHEDULE_EDIT_ROUTE_PATH, end: true }, pathname) !== null
+  );
 }
 
 function serializePluginRpcInput(value: unknown): string {
@@ -298,7 +278,6 @@ export function useBbContext(): BbContext {
 
 export function useBbNavigate(): BbNavigate {
   const pluginId = usePluginId();
-  const toolsHubEnabled = useToolsHubExperiment();
   const location = useLocation();
   const openThreadPanel = usePluginThreadPanelOpenHandler();
   const navigate = useNavigate();
@@ -326,37 +305,28 @@ export function useBbNavigate(): BbNavigate {
   );
   const toPluginPanel = useCallback(
     (path: string, options?: { subPath?: string; replace?: boolean }) => {
-      const route =
-        toolsHubEnabled &&
-        pluginId === AUTOMATIONS_PLUGIN_ID &&
-        path === AUTOMATIONS_PLUGIN_PANEL_PATH
-          ? getAutomationPluginPanelRoutePath(options?.subPath ?? "")
-          : getPluginPanelRoutePath({
-              pluginId,
-              path,
-              ...(options?.subPath !== undefined
-                ? { subPath: options.subPath }
-                : {}),
-            });
+      const route = getPluginPanelRoutePath({
+        pluginId,
+        path,
+        ...(options?.subPath !== undefined ? { subPath: options.subPath } : {}),
+      });
       void navigate(route, options?.replace ? { replace: true } : undefined);
     },
-    [navigate, pluginId, toolsHubEnabled],
+    [navigate, pluginId],
   );
   const toCompose = useCallback(
     (options?: { initialPrompt?: string; focusPrompt?: boolean }) => {
-      const replacesAutomationEditRoute =
+      const replacesScheduleEditRoute =
         pluginId === AUTOMATIONS_PLUGIN_ID &&
-        isAutomationEditRoutePath(location.pathname);
+        isScheduleEditRoutePath(location.pathname);
       // RootComposeView reads `focusPrompt`/`initialPrompt` off the location
       // state to seed and focus the composer (single-use, cleared after read).
       void navigate(getRootComposeRoutePath(), {
-        ...(replacesAutomationEditRoute ? { replace: true } : {}),
+        ...(replacesScheduleEditRoute ? { replace: true } : {}),
         state: {
           focusPrompt: options?.focusPrompt ?? false,
           initialPrompt: options?.initialPrompt ?? "",
-          ...(replacesAutomationEditRoute
-            ? { replaceInitialPrompt: true }
-            : {}),
+          ...(replacesScheduleEditRoute ? { replaceInitialPrompt: true } : {}),
         },
       });
     },

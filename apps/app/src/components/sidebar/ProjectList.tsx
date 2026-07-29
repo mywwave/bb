@@ -932,7 +932,9 @@ export function ProjectListActionButtons({
           onClick={onOpenTools}
         >
           <Icon name="Toolbox" />
-          <span className="min-w-0 flex-1 truncate text-left">Tools</span>
+          <span className="min-w-0 flex-1 truncate text-left">
+            Plugins &amp; Skills
+          </span>
         </Button>
       ) : null}
     </div>

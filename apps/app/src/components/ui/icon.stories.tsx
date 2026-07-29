@@ -34,8 +34,7 @@ const USAGE: Partial<Record<IconName, string>> = {
   CircleDashed: "Child-thread busy section indicator",
   CircleQuestion: "Thread needs user input and timeline question rows",
   CircleX: "Auth callback failure state",
-  Clock:
-    "Thread duration and timestamp affordances, automation prompt action",
+  Clock: "Thread duration and timestamp affordances, schedule prompt action",
   Code: "Right-panel source file visual, Mermaid source toggle",
   Columns2: "Git diff toolbar “split view”",
   Container: "Container icon",
@@ -82,7 +81,7 @@ const USAGE: Partial<Record<IconName, string>> = {
   Pin: "Pin thread action",
   PinOff: "Unpin thread action",
   Plus: "New host button, new terminal button, “new branch” option in branch picker",
-  Repeat: "Automation prompt action",
+  Repeat: "Schedule prompt action",
   RotateCcw:
     "Retry button when fetching timeline turn details fails, reset Mermaid diagram view",
   Rows2: "Git diff toolbar “unified view”",

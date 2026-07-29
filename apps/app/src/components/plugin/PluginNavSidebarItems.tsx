@@ -2,18 +2,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@bb/shared-ui/button";
 import { PluginIcon } from "@/components/plugin/PluginIcon";
 import { PROJECT_LIST_ACTION_BUTTON_CLASS } from "@/components/sidebar/ProjectList";
-import {
-  AUTOMATIONS_PLUGIN_ID,
-  AUTOMATIONS_PLUGIN_PANEL_PATH,
-  getPluginPanelRoutePath,
-} from "@/lib/route-paths";
+import { getPluginPanelRoutePath } from "@/lib/route-paths";
 import { usePluginSlots } from "@/lib/plugin-slots";
 import { cn } from "@bb/shared-ui/lib/utils";
 import type { PluginNavPanelSlot } from "@/lib/plugin-slots";
 import { usePaneContentSplitDrag } from "@/components/sidebar/usePaneContentSplitDrag";
 import { usePaneContentSplitIndicator } from "@/components/sidebar/paneContentSplitIndicator";
 import { SplitPaneMiniMap } from "@/components/sidebar/SplitPaneMiniMap";
-import { useToolsHubExperiment } from "@/components/tools/tools-experiment-context";
 
 /**
  * Sidebar entries for plugin `navPanel` slots (plugin design §5.2): one row
@@ -27,20 +22,10 @@ export function PluginNavSidebarItems(props: {
   splitEnabled?: boolean;
 }) {
   const { navPanels } = usePluginSlots();
-  const toolsHubEnabled = useToolsHubExperiment();
-  const visibleNavPanels = toolsHubEnabled
-    ? navPanels.filter(
-        (panel) =>
-          !(
-            panel.pluginId === AUTOMATIONS_PLUGIN_ID &&
-            panel.path === AUTOMATIONS_PLUGIN_PANEL_PATH
-          ),
-      )
-    : navPanels;
   // Router hooks live in the inner component so hosts without a Router
   // (isolated sidebar tests/stories) can render the empty state.
-  if (visibleNavPanels.length === 0) return null;
-  return <PluginNavSidebarItemList {...props} navPanels={visibleNavPanels} />;
+  if (navPanels.length === 0) return null;
+  return <PluginNavSidebarItemList {...props} navPanels={navPanels} />;
 }
 
 function PluginNavSidebarItemList({
