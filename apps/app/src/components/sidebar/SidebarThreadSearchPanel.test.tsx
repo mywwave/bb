@@ -415,7 +415,7 @@ describe("sidebar thread search navigation items", () => {
 });
 
 describe("ProjectListActionButtons", () => {
-  it("exposes Plugins & Skills without duplicating its child navigation", () => {
+  it("exposes Extensions without duplicating its child navigation", () => {
     const onOpenTools = vi.fn();
     render(
       <ProjectListActionButtons
@@ -424,7 +424,7 @@ describe("ProjectListActionButtons", () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: "Plugins & Skills" }));
+    fireEvent.click(screen.getByRole("button", { name: "Extensions" }));
     expect(onOpenTools).toHaveBeenCalledOnce();
     expect(screen.queryByRole("button", { name: "Skills" })).toBeNull();
     expect(screen.queryByRole("button", { name: "Plugins" })).toBeNull();

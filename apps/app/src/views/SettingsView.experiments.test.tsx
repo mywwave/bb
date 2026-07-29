@@ -56,8 +56,8 @@ describe("ExperimentsSettingsSection side-chat plugin toggle", () => {
   });
 });
 
-describe("ExperimentsSettingsSection Tools Hub toggle", () => {
-  it("reports Tools Hub changes independently of plugin runtime state", () => {
+describe("ExperimentsSettingsSection Extensions toggle", () => {
+  it("reports Extensions changes independently of plugin runtime state", () => {
     const onChange = vi.fn();
     render(
       <ExperimentsSettingsSection
@@ -73,7 +73,7 @@ describe("ExperimentsSettingsSection Tools Hub toggle", () => {
       />,
     );
 
-    const toggle = screen.getByLabelText("Tools Hub");
+    const toggle = screen.getByLabelText("Extensions");
     expect(toggle.hasAttribute("disabled")).toBe(false);
     fireEvent.click(toggle);
     expect(onChange).toHaveBeenCalledWith(true);

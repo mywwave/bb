@@ -43,7 +43,7 @@ import {
 } from "@/hooks/queries/query-keys";
 import { THREAD_SEARCH_LIMIT_PER_GROUP } from "@/hooks/queries/thread-queries";
 import { StoryCard, StoryRow } from "../../../.ladle/story-card";
-import { PluginNavSidebarItems } from "@/components/plugin/PluginNavSidebarItems";
+import { PluginNavSidebarSection } from "@/components/plugin/PluginNavSidebarSection";
 import {
   removePluginSlotRegistrations,
   setPluginSlotRegistrations,
@@ -707,7 +707,7 @@ export function SplitPageLabels() {
                 onNewChat={noop}
               />
             </div>
-            <PluginNavSidebarItems splitEnabled />
+            <PluginNavSidebarSection splitEnabled />
           </div>
         </StoryRow>
       </StoryCard>

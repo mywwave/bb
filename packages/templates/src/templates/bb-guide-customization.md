@@ -60,10 +60,11 @@ understand; development builds always show these diagnostic rows.
   bb settings version [--force]
   bb settings reload
 
-The `toolsHub` experiment exposes the Plugins & Skills management UI. Schedules
-stay beside threads. It does not enable or disable installed skills, schedule
-execution, plugin runtimes, CLI commands, or backend APIs. Control user plugin
-loading separately with the `plugins` experiment.
+The `toolsHub` experiment exposes Extensions for managing skills and plugins.
+Automations stays in the Plugins section beside threads. It does not enable or
+disable installed skills, automation execution, plugin runtimes, CLI commands,
+or backend APIs. Control user plugin loading separately with the `plugins`
+experiment.
 
 Thread timeline windows are bounded by event count as well as user-message
 count (`BB_FF_TIMELINE_WINDOW_EVENT_BUDGET`, default 1500), so a long thread

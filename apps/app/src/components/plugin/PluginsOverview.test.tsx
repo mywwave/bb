@@ -54,7 +54,7 @@ const AUTOMATIONS_PLUGIN = {
   status: "running",
   statusDetail: null,
   description: "Schedule recurring and one-shot agent or script work.",
-  name: "Schedules",
+  name: "Automations",
   icon: "Clock",
   logoUrl: null,
   logoDarkUrl: null,
@@ -156,7 +156,7 @@ describe("PluginsOverview", () => {
       </MemoryRouter>,
     );
 
-    expect(await screen.findByText("Schedules")).toBeTruthy();
+    expect(await screen.findByText("Automations")).toBeTruthy();
     const installedTab = screen.getByRole("tab", {
       name: "Installed, 1 plugin",
     });
@@ -190,7 +190,7 @@ describe("PluginsOverview", () => {
 
     fireEvent.click(
       await screen.findByRole("button", {
-        name: "Schedules plugin details",
+        name: "Automations plugin details",
       }),
     );
     expect(screen.getByTestId("location-path").textContent).toBe(
@@ -452,7 +452,7 @@ describe("PluginsOverview", () => {
       </MemoryRouter>,
     );
 
-    expect(await screen.findByText("Schedules")).toBeTruthy();
+    expect(await screen.findByText("Automations")).toBeTruthy();
     expect(screen.queryByRole("tab", { name: "Browse" })).toBeNull();
     expect(screen.getByText(/Browsing and installation are off/)).toBeTruthy();
   });

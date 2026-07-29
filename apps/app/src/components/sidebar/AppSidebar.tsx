@@ -23,7 +23,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar.js";
 import { ProjectList, ProjectListActionButtons } from "./ProjectList";
-import { PluginNavSidebarItems } from "@/components/plugin/PluginNavSidebarItems";
+import { PluginNavSidebarSection } from "@/components/plugin/PluginNavSidebarSection";
 import { PluginSidebarFooterActions } from "@/components/plugin/PluginSidebarFooterActions";
 import { SidebarUpdatesBadge } from "./SidebarUpdatesBadge";
 import { SidebarHistoryNavigationControls } from "./SidebarHistoryNavigationControls";
@@ -404,11 +404,11 @@ export function AppSidebar({
             }}
           />
         </div>
-        <PluginNavSidebarItems
-          onNavigate={closeOnMobile}
-          splitEnabled={threadSplitsEnabled}
-        />
         <SidebarContent>
+          <PluginNavSidebarSection
+            onNavigate={closeOnMobile}
+            splitEnabled={threadSplitsEnabled}
+          />
           <ProjectList
             onNewProject={
               quickCreateProject.isAvailable

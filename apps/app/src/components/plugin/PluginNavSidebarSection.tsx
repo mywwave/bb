@@ -1,7 +1,10 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import { useAtom } from "jotai";
 import { Button } from "@bb/shared-ui/button";
 import { PluginIcon } from "@/components/plugin/PluginIcon";
 import { PROJECT_LIST_ACTION_BUTTON_CLASS } from "@/components/sidebar/ProjectList";
+import { TopLevelSidebarSection } from "@/components/sidebar/TopLevelSidebarSection";
+import { pluginNavSidebarCollapsedAtom } from "@/components/sidebar/sidebarCollapsedAtoms";
 import { getPluginPanelRoutePath } from "@/lib/route-paths";
 import { usePluginSlots } from "@/lib/plugin-slots";
 import { cn } from "@bb/shared-ui/lib/utils";
@@ -11,21 +14,34 @@ import { usePaneContentSplitIndicator } from "@/components/sidebar/paneContentSp
 import { SplitPaneMiniMap } from "@/components/sidebar/SplitPaneMiniMap";
 
 /**
- * Sidebar entries for plugin `navPanel` slots (plugin design §5.2): one row
- * per registered panel, styled like primary sidebar actions, navigating to
- * the panel's own route under /plugins/<pluginId>/<path>. Renders nothing
- * while no plugin contributes a panel. Only host chrome renders here — the
- * plugin's component mounts on the route (PluginPanelView).
+ * A collapsible Plugins section for plugin `navPanel` slots (plugin design
+ * §5.2). It shares the sidebar's main scroll region with threads, so an
+ * arbitrary number of contributed pages never creates a second scroll area or
+ * pushes the thread tree out of a fixed chrome region.
  */
-export function PluginNavSidebarItems(props: {
+export function PluginNavSidebarSection(props: {
   onNavigate?: () => void;
   splitEnabled?: boolean;
 }) {
   const { navPanels } = usePluginSlots();
-  // Router hooks live in the inner component so hosts without a Router
-  // (isolated sidebar tests/stories) can render the empty state.
+  const [isCollapsed, setIsCollapsed] = useAtom(pluginNavSidebarCollapsedAtom);
   if (navPanels.length === 0) return null;
-  return <PluginNavSidebarItemList {...props} navPanels={navPanels} />;
+  return (
+    <div
+      className="px-2 pt-1 group-data-[collapsible=icon]:hidden"
+      data-testid="plugin-nav-sidebar-section"
+    >
+      <TopLevelSidebarSection
+        label="Plugins"
+        collapseControl={{
+          isCollapsed,
+          onToggleCollapsed: () => setIsCollapsed((current) => !current),
+        }}
+      >
+        <PluginNavSidebarItemList {...props} navPanels={navPanels} />
+      </TopLevelSidebarSection>
+    </div>
+  );
 }
 
 function PluginNavSidebarItemList({
@@ -39,12 +55,7 @@ function PluginNavSidebarItemList({
 }) {
   const location = useLocation();
   return (
-    <div
-      // Pull back most of the primary-actions bottom padding so plugin panel
-      // rows keep the same compact 2px rhythm as sidebar thread rows.
-      className="-mt-1.5 shrink-0 space-y-0.5 px-2 pb-2 group-data-[collapsible=icon]:hidden"
-      data-testid="plugin-nav-sidebar-items"
-    >
+    <div className="space-y-0.5" data-testid="plugin-nav-sidebar-items">
       {navPanels.map((panel) => {
         return (
           <PluginNavSidebarItem

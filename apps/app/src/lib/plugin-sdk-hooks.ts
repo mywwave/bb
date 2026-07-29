@@ -49,7 +49,7 @@ import {
   getProjectComposeRoutePath,
   getRootComposeRoutePath,
   getThreadRoutePath,
-  SCHEDULE_EDIT_ROUTE_PATH,
+  AUTOMATION_EDIT_ROUTE_PATH,
 } from "@/lib/route-paths";
 import { useRouteState } from "@/hooks/useRouteState";
 import { useServerConnectionState } from "@/hooks/useServerConnectionState";
@@ -68,9 +68,10 @@ type FetchLike = (
   init?: RequestInit,
 ) => Promise<Pick<Response, "ok" | "status" | "json">>;
 
-export function isScheduleEditRoutePath(pathname: string): boolean {
+export function isAutomationEditRoutePath(pathname: string): boolean {
   return (
-    matchPath({ path: SCHEDULE_EDIT_ROUTE_PATH, end: true }, pathname) !== null
+    matchPath({ path: AUTOMATION_EDIT_ROUTE_PATH, end: true }, pathname) !==
+    null
   );
 }
 
@@ -316,17 +317,19 @@ export function useBbNavigate(): BbNavigate {
   );
   const toCompose = useCallback(
     (options?: { initialPrompt?: string; focusPrompt?: boolean }) => {
-      const replacesScheduleEditRoute =
+      const replacesAutomationEditRoute =
         pluginId === AUTOMATIONS_PLUGIN_ID &&
-        isScheduleEditRoutePath(location.pathname);
+        isAutomationEditRoutePath(location.pathname);
       // RootComposeView reads `focusPrompt`/`initialPrompt` off the location
       // state to seed and focus the composer (single-use, cleared after read).
       void navigate(getRootComposeRoutePath(), {
-        ...(replacesScheduleEditRoute ? { replace: true } : {}),
+        ...(replacesAutomationEditRoute ? { replace: true } : {}),
         state: {
           focusPrompt: options?.focusPrompt ?? false,
           initialPrompt: options?.initialPrompt ?? "",
-          ...(replacesScheduleEditRoute ? { replaceInitialPrompt: true } : {}),
+          ...(replacesAutomationEditRoute
+            ? { replaceInitialPrompt: true }
+            : {}),
         },
       });
     },
