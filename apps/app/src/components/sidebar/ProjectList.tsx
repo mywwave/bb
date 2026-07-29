@@ -931,7 +931,7 @@ export function ProjectListActionButtons({
           className={PROJECT_LIST_ACTION_BUTTON_CLASS}
           onClick={onOpenTools}
         >
-          <Icon name="Puzzle" />
+          <Icon name="Toolbox" />
           <span className="min-w-0 flex-1 truncate text-left">Extensions</span>
         </Button>
       ) : null}
